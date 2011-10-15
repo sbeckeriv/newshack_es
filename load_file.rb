@@ -68,10 +68,21 @@ if(querys.size==1)
 else
   querys= {"and"=>querys}
 end
+facets = {
+      "tags" => { "terms" => {"field" => "body"} },
+"articles" => {
+            "date_histogram" => {
+                "field" => "created_at",
+                "interval" => "hour"
+            }
+        }
+      
+    }
+
 size = (params[:size]||10).to_i
 from = params["page"].to_i * size
 qu = {"size"=>size,
-  "from"=>from,
+  "from"=>from,"facets"=>facets,
   "query"=>
 {"filtered"=>
   {"filter"=>querys,
